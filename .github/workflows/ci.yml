@@ -29,8 +29,8 @@ jobs:
       - name: Install script help
         run: sh install.sh --help
 
-      - name: Build site, fail on bundle drift, and check site
-        run: bun run build:site && git diff --exit-code site/assets/demo.js && bun run check:site
+      - name: Check site
+        run: bun run check:site
 
       - name: Write fixtures
         run: bun run make-fixtures

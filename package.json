@@ -26,7 +26,6 @@
     "typecheck": "tsc --noEmit",
     "test": "bun test",
     "make-fixtures": "bun src/fixtures.ts",
-    "build:site": "node scripts/build-site.mjs",
     "check:site": "node scripts/check-site.mjs"
   },
   "keywords": [

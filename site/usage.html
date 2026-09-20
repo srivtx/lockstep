@@ -1,0 +1,249 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Usage — lockstep</title>
+<meta name="description" content="lockstep CLI flags, exit codes, JSON output, and the library API.">
+<meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0a0a0a" media="(prefers-color-scheme: dark)">
+<meta name="color-scheme" content="light dark">
+<meta property="og:title" content="Usage — lockstep">
+<meta property="og:description" content="lockstep CLI flags, exit codes, JSON output, and the library API.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://srivtx.github.io/lockstep/usage.html">
+<meta property="og:image" content="https://srivtx.github.io/lockstep/assets/og.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Usage — lockstep">
+<meta name="twitter:description" content="lockstep CLI flags, exit codes, JSON output, and the library API.">
+<meta name="twitter:image" content="https://srivtx.github.io/lockstep/assets/og.png">
+<link rel="canonical" href="https://srivtx.github.io/lockstep/usage.html">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%2316a34a'/%3E%3Cg fill='none' stroke='white' stroke-width='2.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M9 8v16M23 8v16'/%3E%3Cpath d='M13 16l3 3 6-7'/%3E%3C/g%3E%3C/svg%3E">
+<link rel="stylesheet" href="assets/lens.css">
+<link rel="stylesheet" href="assets/theme.css">
+<script>
+(function () {
+  try {
+    var stored = window.localStorage.getItem("lockstep-theme");
+    if (stored === "dark" || stored === "light") {
+      document.documentElement.setAttribute("data-theme", stored);
+    }
+  } catch (err) {}
+})();
+</script>
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+
+<header class="nav" id="top">
+  <div class="container nav__inner">
+    <a class="brand" href="index.html" aria-label="lockstep home">
+      <span class="brand__mark" aria-hidden="true">
+        <svg class="icon" viewBox="0 0 32 32" focusable="false">
+          <path d="M9 8v16"></path>
+          <path d="M23 8v16"></path>
+          <path d="M13 16l3 3 6-7"></path>
+        </svg>
+      </span>
+      <span class="brand__name">lockstep</span>
+      <span class="brand__tag">toolchain drift guard</span>
+    </a>
+
+    <nav class="nav__links" id="site-nav" aria-label="Sections">
+      <a href="rules.html">Rules</a>
+      <a href="usage.html">Usage</a>
+      <a href="ci.html">CI</a>
+      <a href="faq.html">FAQ</a>
+      <a href="https://github.com/srivtx/lockstep">GitHub</a>
+    </nav>
+
+    <div class="nav__actions">
+      <button type="button" class="nav__toggle btn btn--ghost btn--sm" id="nav-toggle" aria-expanded="false" aria-controls="site-nav" aria-label="Open navigation">
+        <svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 7h16M4 12h16M4 17h16"></path></svg>
+      </button>
+      <button type="button" class="btn btn--ghost btn--sm" id="theme-toggle" aria-pressed="false" aria-label="Switch to dark theme">
+        <svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"></path></svg>
+        <span id="theme-toggle-text">Theme</span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<main id="main">
+  <div class="container">
+    <div class="docs">
+      <nav class="docs__nav" aria-label="Docs">
+        <h2>lockstep</h2>
+        <ul>
+          <li><a href="index.html">Overview</a></li>
+          <li><a href="rules.html">Rules</a></li>
+          <li><a href="usage.html" aria-current="page">Usage</a></li>
+          <li><a href="ci.html">CI</a></li>
+          <li><a href="faq.html">FAQ</a></li>
+        </ul>
+      </nav>
+
+      <article class="docs__body">
+        <div class="docs__head">
+          <p class="eyebrow">Reference</p>
+          <h1>Usage</h1>
+          <p>One project per run. Pass it the directory to audit and lockstep reads the local files, prints a report, and exits with a code CI can gate on.</p>
+        </div>
+
+        <h2>Install</h2>
+        <div class="term" aria-label="Install commands">
+          <div class="term__bar">
+            <span class="term__dots" aria-hidden="true"><i></i><i></i><i></i></span>
+            <span class="term__title">install</span>
+          </div>
+          <pre class="term__body term__body--wrap"><span class="ln"><span class="dim"># one-line install (installs the `lockstep` binary)</span></span><span class="ln"><span class="p">$ </span><span class="cmd">curl -fsSL https://raw.githubusercontent.com/srivtx/lockstep/main/install.sh | sh</span></span><span class="ln"></span><span class="ln"><span class="dim"># run once, without installing</span></span><span class="ln"><span class="p">$ </span><span class="cmd">bunx github:srivtx/lockstep#main</span></span><span class="ln"></span><span class="ln"><span class="dim"># add as a project dev dependency</span></span><span class="ln"><span class="p">$ </span><span class="cmd">bun add -d github:srivtx/lockstep</span></span></pre>
+        </div>
+
+        <h2>Command-line flags</h2>
+        <div class="table-wrap">
+          <table>
+            <caption>Every flag lockstep accepts.</caption>
+            <thead>
+              <tr><th scope="col">Flag</th><th scope="col">Description</th></tr>
+            </thead>
+            <tbody>
+              <tr><td><code>lockstep [dir]</code></td><td>Audit the project in <code>dir</code>. Defaults to the current directory.</td></tr>
+              <tr><td><code>--dir &lt;path&gt;</code></td><td>Audit the project rooted at <code>path</code>. Equivalent to the positional form.</td></tr>
+              <tr><td><code>--json</code></td><td>Print one machine-readable JSON object to stdout with a stable field order.</td></tr>
+              <tr><td><code>--quiet</code>, <code>-q</code></td><td>Print only the summary line.</td></tr>
+              <tr><td><code>--sarif &lt;path&gt;</code></td><td>Write a SARIF 2.1.0 report for GitHub code scanning.</td></tr>
+              <tr><td><code>--fail-on &lt;level&gt;</code></td><td><code>error</code> (default), <code>warning</code>, <code>info</code>, or <code>none</code> — the exit-code threshold.</td></tr>
+              <tr><td><code>--</code></td><td>End option parsing; treat the remaining argument as the target directory.</td></tr>
+              <tr><td><code>-h</code>, <code>--help</code> / <code>-v</code>, <code>--version</code></td><td>Print help or the version and exit.</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>Every option that takes a value accepts both <code>--flag value</code> and <code>--flag=value</code>. lockstep audits one project at a time; passing more than one path is a usage error.</p>
+
+        <h2>Examples</h2>
+        <div class="term" aria-label="Example commands">
+          <div class="term__bar">
+            <span class="term__dots" aria-hidden="true"><i></i><i></i><i></i></span>
+            <span class="term__title">examples</span>
+          </div>
+          <pre class="term__body term__body--wrap"><span class="ln"><span class="dim"># audit the current directory</span></span><span class="ln"><span class="p">$ </span><span class="cmd">lockstep</span></span><span class="ln"></span><span class="ln"><span class="dim"># audit another project</span></span><span class="ln"><span class="p">$ </span><span class="cmd">lockstep path/to/project</span></span><span class="ln"></span><span class="ln"><span class="dim"># machine-readable output</span></span><span class="ln"><span class="p">$ </span><span class="cmd">lockstep --json</span></span><span class="ln"></span><span class="ln"><span class="dim"># summary only</span></span><span class="ln"><span class="p">$ </span><span class="cmd">lockstep --quiet</span></span><span class="ln"></span><span class="ln"><span class="dim"># SARIF for GitHub code scanning, fail on warnings too</span></span><span class="ln"><span class="p">$ </span><span class="cmd">lockstep --sarif lockstep.sarif --fail-on warning</span></span></pre>
+        </div>
+
+        <h2>Exit codes</h2>
+        <div class="table-wrap">
+          <table>
+            <caption>The exit code is the CI gate.</caption>
+            <thead>
+              <tr><th scope="col">Code</th><th scope="col">Meaning</th></tr>
+            </thead>
+            <tbody>
+              <tr><td><code>0</code></td><td>No findings at or above <code>--fail-on</code>.</td></tr>
+              <tr><td><code>1</code></td><td>At least one finding at or above <code>--fail-on</code>.</td></tr>
+              <tr><td><code>2</code></td><td>Invalid usage or unreadable input, including a malformed workflow.</td></tr>
+              <tr><td><code>3</code></td><td>I/O error: a report could not be written.</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p><code>--fail-on</code> affects only the exit code. Every finding is still reported and included in the JSON and SARIF output.</p>
+
+        <h2>Text output</h2>
+        <p>Without flags, lockstep prints the summary, then each declared source, then the findings. The drifted fixture below is the exact shape of a failing run.</p>
+        <pre class="code"><code>fixtures/drifted  errors:2  warnings:2  info:1
+node  .github/workflows/ci.yml:setup-node  20
+node  .node-version  18.19.0
+node  .nvmrc  v20.11.0
+node  engines.node  &gt;=18
+packageManager  packageManager  pnpm@9.12.0
+ERROR  LOCK-001  package.json:engines.node  Node version sources disagree across majors: Node 18 (.node-version=18.19.0, engines.node=&gt;=18); Node 20 (.github/workflows/ci.yml:setup-node=20, .nvmrc=v20.11.0).
+ERROR  LOCK-002  package.json:packageManager  packageManager declares "pnpm" but the committed lockfile(s) belong to npm (package-lock.json).</code></pre>
+
+        <h2>JSON output</h2>
+        <p>With <code>--json</code>, lockstep prints one object. Field order is stable, so a diff between two runs means a real change. The clean fixture produces no issues; this is a drifted project trimmed to one source and one finding.</p>
+        <pre class="code"><code>{
+  "file": "fixtures/drifted",
+  "sources": [
+    {
+      "source": ".node-version",
+      "file": ".node-version",
+      "value": "18.19.0",
+      "kind": "node"
+    }
+  ],
+  "issues": [
+    {
+      "code": "LOCK-001",
+      "severity": "error",
+      "message": "Node version sources disagree across majors: Node 18 (.node-version=18.19.0, engines.node=&gt;=18); Node 20 (.github/workflows/ci.yml:setup-node=20, .nvmrc=v20.11.0).",
+      "location": "package.json:engines.node",
+      "file": "package.json"
+    }
+  ],
+  "counts": { "error": 2, "warning": 2, "info": 1 }
+}</code></pre>
+
+        <h2>Library</h2>
+        <p>The CLI is a thin wrapper over the same functions. Import them directly when you are already in TypeScript.</p>
+        <pre class="code"><code>import { auditProject, runRules, toSarif } from "lockstep";
+
+const result = auditProject("path/to/project");
+// { file, sources, issues, counts }
+
+const sarif = toSarif(result, "lockstep", "0.1.0");</code></pre>
+
+        <div class="docs__foot">
+          <a href="rules.html">← Rules</a>
+          <a href="ci.html">CI →</a>
+        </div>
+      </article>
+    </div>
+  </div>
+</main>
+
+<footer class="footer">
+  <div class="container">
+    <div class="footer__inner">
+      <div class="footer__brand">
+        <span class="brand__mark" aria-hidden="true">
+          <svg class="icon" viewBox="0 0 32 32" focusable="false">
+            <path d="M9 8v16"></path>
+            <path d="M23 8v16"></path>
+            <path d="M13 16l3 3 6-7"></path>
+          </svg>
+        </span>
+        <div>
+          <p>lockstep</p>
+          <p class="muted">Offline toolchain drift guard for JavaScript and TypeScript projects.</p>
+        </div>
+      </div>
+
+      <nav aria-label="Documentation">
+        <h2>Documentation</h2>
+        <ul>
+          <li><a href="rules.html">Rules</a></li>
+          <li><a href="usage.html">Usage</a></li>
+          <li><a href="ci.html">CI</a></li>
+          <li><a href="faq.html">FAQ</a></li>
+        </ul>
+      </nav>
+
+      <nav aria-label="Project">
+        <h2>Project</h2>
+        <ul>
+          <li><a href="https://github.com/srivtx/lockstep">Repository</a></li>
+          <li><a href="https://github.com/srivtx/lockstep/blob/main/LICENSE">MIT license</a></li>
+          <li><a href="https://github.com/srivtx/lockstep/issues">Issues</a></li>
+          <li><a href="https://srivtx.github.io/lenses">Lenses suite</a></li>
+        </ul>
+      </nav>
+    </div>
+
+    <div class="footer__meta">
+      <p>by svx · MIT Licensed · 2026</p>
+      <a href="#top">Back to top</a>
+    </div>
+  </div>
+</footer>
+
+<script src="assets/site.js" defer></script>
+</body>
+</html>

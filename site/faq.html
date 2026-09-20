@@ -1,0 +1,211 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>FAQ — lockstep</title>
+<meta name="description" content="lockstep scope, limitations, and how it compares to corepack, Volta, nvm, syncpack, and Renovate.">
+<meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0a0a0a" media="(prefers-color-scheme: dark)">
+<meta name="color-scheme" content="light dark">
+<meta property="og:title" content="FAQ — lockstep">
+<meta property="og:description" content="lockstep scope, limitations, and how it compares to other toolchain tooling.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://srivtx.github.io/lockstep/faq.html">
+<meta property="og:image" content="https://srivtx.github.io/lockstep/assets/og.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="FAQ — lockstep">
+<meta name="twitter:description" content="lockstep scope, limitations, and how it compares to other toolchain tooling.">
+<meta name="twitter:image" content="https://srivtx.github.io/lockstep/assets/og.png">
+<link rel="canonical" href="https://srivtx.github.io/lockstep/faq.html">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%2316a34a'/%3E%3Cg fill='none' stroke='white' stroke-width='2.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M9 8v16M23 8v16'/%3E%3Cpath d='M13 16l3 3 6-7'/%3E%3C/g%3E%3C/svg%3E">
+<link rel="stylesheet" href="assets/lens.css">
+<link rel="stylesheet" href="assets/theme.css">
+<script>
+(function () {
+  try {
+    var stored = window.localStorage.getItem("lockstep-theme");
+    if (stored === "dark" || stored === "light") {
+      document.documentElement.setAttribute("data-theme", stored);
+    }
+  } catch (err) {}
+})();
+</script>
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+
+<header class="nav" id="top">
+  <div class="container nav__inner">
+    <a class="brand" href="index.html" aria-label="lockstep home">
+      <span class="brand__mark" aria-hidden="true">
+        <svg class="icon" viewBox="0 0 32 32" focusable="false">
+          <path d="M9 8v16"></path>
+          <path d="M23 8v16"></path>
+          <path d="M13 16l3 3 6-7"></path>
+        </svg>
+      </span>
+      <span class="brand__name">lockstep</span>
+      <span class="brand__tag">toolchain drift guard</span>
+    </a>
+
+    <nav class="nav__links" id="site-nav" aria-label="Sections">
+      <a href="rules.html">Rules</a>
+      <a href="usage.html">Usage</a>
+      <a href="ci.html">CI</a>
+      <a href="faq.html">FAQ</a>
+      <a href="https://github.com/srivtx/lockstep">GitHub</a>
+    </nav>
+
+    <div class="nav__actions">
+      <button type="button" class="nav__toggle btn btn--ghost btn--sm" id="nav-toggle" aria-expanded="false" aria-controls="site-nav" aria-label="Open navigation">
+        <svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 7h16M4 12h16M4 17h16"></path></svg>
+      </button>
+      <button type="button" class="btn btn--ghost btn--sm" id="theme-toggle" aria-pressed="false" aria-label="Switch to dark theme">
+        <svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"></path></svg>
+        <span id="theme-toggle-text">Theme</span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<main id="main">
+  <div class="container">
+    <div class="docs">
+      <nav class="docs__nav" aria-label="Docs">
+        <h2>lockstep</h2>
+        <ul>
+          <li><a href="index.html">Overview</a></li>
+          <li><a href="rules.html">Rules</a></li>
+          <li><a href="usage.html">Usage</a></li>
+          <li><a href="ci.html">CI</a></li>
+          <li><a href="faq.html" aria-current="page">FAQ</a></li>
+        </ul>
+      </nav>
+
+      <article class="docs__body">
+        <div class="docs__head">
+          <p class="eyebrow">Reference</p>
+          <h1>FAQ</h1>
+          <p>Scope, limits, and where lockstep fits next to the toolchain tools you already use.</p>
+        </div>
+
+        <h2>Questions</h2>
+        <div class="faq">
+          <details>
+            <summary>Does it need a browser or a network?</summary>
+            <div class="faq__body"><p>No. lockstep reads local files only, with no network code, uploads, or telemetry. It runs the same on a laptop, in a container, or in air-gapped CI.</p></div>
+          </details>
+          <details>
+            <summary>Does it change my project?</summary>
+            <div class="faq__body"><p>No. lockstep is read-only. It never rewrites <code>package.json</code>, a version file, or a workflow. The only file it writes is the SARIF report when you pass <code>--sarif</code>.</p></div>
+          </details>
+          <details>
+            <summary>How many projects can I audit at once?</summary>
+            <div class="faq__body"><p>One per run. Pass a positional directory or <code>--dir &lt;path&gt;</code>; the default is the current directory. Passing more than one path is a usage error that exits <code>2</code>.</p></div>
+          </details>
+          <details>
+            <summary>What happens when a file is missing?</summary>
+            <div class="faq__body"><p>A missing source is skipped, not an error. Most projects do not have all of <code>.nvmrc</code>, <code>.node-version</code>, <code>.tool-versions</code>, and <code>mise.toml</code>, and that is expected.</p></div>
+          </details>
+          <details>
+            <summary>Does it check my dependencies?</summary>
+            <div class="faq__body"><p>No. lockstep is not a security scanner and does not inspect the dependency tree. It compares the versions of Node, Bun, and the package manager declared across the project.</p></div>
+          </details>
+          <details>
+            <summary>How do I fail CI on warnings too?</summary>
+            <div class="faq__body"><p>Run <code>lockstep --fail-on warning</code>. It affects only the exit code; every finding is still reported and included in JSON and SARIF output.</p></div>
+          </details>
+          <details>
+            <summary>What do the exit codes mean?</summary>
+            <div class="faq__body"><p><code>0</code> when there are no findings at or above <code>--fail-on</code>, <code>1</code> when there are, <code>2</code> on invalid usage or unreadable input, and <code>3</code> on an I/O error writing the report.</p></div>
+          </details>
+        </div>
+
+        <h2>Limitations</h2>
+        <div class="callout" role="note">
+          <h3>Static analysis</h3>
+          <p>lockstep reads declarations; it does not run your toolchain or install anything. It checks the places a version is declared, so a version injected at runtime, matrix-expanded in a workflow, or resolved from a remote config is outside its view. It covers GitHub Actions workflows only, not other CI providers.</p>
+        </div>
+
+        <h2>How it compares</h2>
+        <div class="deflist">
+          <div class="defrow">
+            <dt class="defrow__term">corepack</dt>
+            <dd class="defrow__def">Activates and shims the manager named in <code>packageManager</code>, but does not compare that field to <code>engines</code>, the lockfile, or CI, and it is being removed from Node. <a href="https://nodejs.org/api/corepack.html">nodejs.org</a></dd>
+          </div>
+          <div class="defrow">
+            <dt class="defrow__term">Volta / nvm / fnm</dt>
+            <dd class="defrow__def">Install one runtime version for a shell or directory. Each reads its own file and none checks whether the other sources agree. <a href="https://volta.sh">volta.sh</a></dd>
+          </div>
+          <div class="defrow">
+            <dt class="defrow__term">syncpack</dt>
+            <dd class="defrow__def">Aligns dependency versions within and across <code>package.json</code> files in a monorepo. It does not look at Node, Bun, or package-manager versions. <a href="https://github.com/JamieMason/syncpack">github.com/JamieMason/syncpack</a></dd>
+          </div>
+          <div class="defrow">
+            <dt class="defrow__term">Renovate / Dependabot</dt>
+            <dd class="defrow__def">Open pull requests to update dependencies. They do not verify that <code>engines</code>, <code>.nvmrc</code>, the lockfile, and CI all name the same runtime. <a href="https://docs.renovatebot.com">docs.renovatebot.com</a></dd>
+          </div>
+          <div class="defrow">
+            <dt class="defrow__term">actionlint</dt>
+            <dd class="defrow__def">Lints GitHub Actions workflow syntax and expressions. It validates the YAML, not the version consistency between a workflow and the rest of the project. <a href="https://github.com/rhysd/actionlint">github.com/rhysd/actionlint</a></dd>
+          </div>
+        </div>
+
+        <div class="docs__foot">
+          <a href="ci.html">← CI</a>
+          <a href="index.html">Overview →</a>
+        </div>
+      </article>
+    </div>
+  </div>
+</main>
+
+<footer class="footer">
+  <div class="container">
+    <div class="footer__inner">
+      <div class="footer__brand">
+        <span class="brand__mark" aria-hidden="true">
+          <svg class="icon" viewBox="0 0 32 32" focusable="false">
+            <path d="M9 8v16"></path>
+            <path d="M23 8v16"></path>
+            <path d="M13 16l3 3 6-7"></path>
+          </svg>
+        </span>
+        <div>
+          <p>lockstep</p>
+          <p class="muted">Offline toolchain drift guard for JavaScript and TypeScript projects.</p>
+        </div>
+      </div>
+
+      <nav aria-label="Documentation">
+        <h2>Documentation</h2>
+        <ul>
+          <li><a href="rules.html">Rules</a></li>
+          <li><a href="usage.html">Usage</a></li>
+          <li><a href="ci.html">CI</a></li>
+          <li><a href="faq.html">FAQ</a></li>
+        </ul>
+      </nav>
+
+      <nav aria-label="Project">
+        <h2>Project</h2>
+        <ul>
+          <li><a href="https://github.com/srivtx/lockstep">Repository</a></li>
+          <li><a href="https://github.com/srivtx/lockstep/blob/main/LICENSE">MIT license</a></li>
+          <li><a href="https://github.com/srivtx/lockstep/issues">Issues</a></li>
+          <li><a href="https://srivtx.github.io/lenses">Lenses suite</a></li>
+        </ul>
+      </nav>
+    </div>
+
+    <div class="footer__meta">
+      <p>by svx · MIT Licensed · 2026</p>
+      <a href="#top">Back to top</a>
+    </div>
+  </div>
+</footer>
+
+<script src="assets/site.js" defer></script>
+</body>
+</html>

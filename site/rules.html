@@ -1,0 +1,238 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Rules — lockstep</title>
+<meta name="description" content="The ten lockstep rules, the version sources they read, and how a single project run is assembled.">
+<meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0a0a0a" media="(prefers-color-scheme: dark)">
+<meta name="color-scheme" content="light dark">
+<meta property="og:title" content="Rules — lockstep">
+<meta property="og:description" content="The ten lockstep rules and the version sources they cross-check.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://srivtx.github.io/lockstep/rules.html">
+<meta property="og:image" content="https://srivtx.github.io/lockstep/assets/og.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Rules — lockstep">
+<meta name="twitter:description" content="The ten lockstep rules and the version sources they cross-check.">
+<meta name="twitter:image" content="https://srivtx.github.io/lockstep/assets/og.png">
+<link rel="canonical" href="https://srivtx.github.io/lockstep/rules.html">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%2316a34a'/%3E%3Cg fill='none' stroke='white' stroke-width='2.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M9 8v16M23 8v16'/%3E%3Cpath d='M13 16l3 3 6-7'/%3E%3C/g%3E%3C/svg%3E">
+<link rel="stylesheet" href="assets/lens.css">
+<link rel="stylesheet" href="assets/theme.css">
+<script>
+(function () {
+  try {
+    var stored = window.localStorage.getItem("lockstep-theme");
+    if (stored === "dark" || stored === "light") {
+      document.documentElement.setAttribute("data-theme", stored);
+    }
+  } catch (err) {}
+})();
+</script>
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+
+<header class="nav" id="top">
+  <div class="container nav__inner">
+    <a class="brand" href="index.html" aria-label="lockstep home">
+      <span class="brand__mark" aria-hidden="true">
+        <svg class="icon" viewBox="0 0 32 32" focusable="false">
+          <path d="M9 8v16"></path>
+          <path d="M23 8v16"></path>
+          <path d="M13 16l3 3 6-7"></path>
+        </svg>
+      </span>
+      <span class="brand__name">lockstep</span>
+      <span class="brand__tag">toolchain drift guard</span>
+    </a>
+
+    <nav class="nav__links" id="site-nav" aria-label="Sections">
+      <a href="rules.html">Rules</a>
+      <a href="usage.html">Usage</a>
+      <a href="ci.html">CI</a>
+      <a href="faq.html">FAQ</a>
+      <a href="https://github.com/srivtx/lockstep">GitHub</a>
+    </nav>
+
+    <div class="nav__actions">
+      <button type="button" class="nav__toggle btn btn--ghost btn--sm" id="nav-toggle" aria-expanded="false" aria-controls="site-nav" aria-label="Open navigation">
+        <svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 7h16M4 12h16M4 17h16"></path></svg>
+      </button>
+      <button type="button" class="btn btn--ghost btn--sm" id="theme-toggle" aria-pressed="false" aria-label="Switch to dark theme">
+        <svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"></path></svg>
+        <span id="theme-toggle-text">Theme</span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<main id="main">
+  <div class="container">
+    <div class="docs">
+      <nav class="docs__nav" aria-label="Docs">
+        <h2>lockstep</h2>
+        <ul>
+          <li><a href="index.html">Overview</a></li>
+          <li><a href="rules.html" aria-current="page">Rules</a></li>
+          <li><a href="usage.html">Usage</a></li>
+          <li><a href="ci.html">CI</a></li>
+          <li><a href="faq.html">FAQ</a></li>
+        </ul>
+      </nav>
+
+      <article class="docs__body">
+        <div class="docs__head">
+          <p class="eyebrow">Reference</p>
+          <h1>The rules</h1>
+          <p>Ten checks over one question: do the places this project declares a toolchain version agree with each other? Each rule names the sources it compares and carries a fixed code.</p>
+        </div>
+
+        <h2>What a run reads</h2>
+        <p>lockstep scans a single project directory. Every source below is optional; a missing file is skipped, not an error. Nothing is written back to the project.</p>
+        <ul>
+          <li><code>package.json</code> — <code>engines.node</code>, <code>engines.bun</code>, <code>packageManager</code>, and <code>volta</code>.</li>
+          <li><code>.nvmrc</code> and <code>.node-version</code> — the Node version each manager would install.</li>
+          <li><code>.tool-versions</code> and <code>mise.toml</code> — the asdf and mise pins.</li>
+          <li>The committed lockfile — <code>package-lock.json</code>, <code>yarn.lock</code>, <code>pnpm-lock.yaml</code>, <code>bun.lock</code>, or <code>bun.lockb</code>.</li>
+          <li>Every <code>.github/workflows/*.yml</code> — <code>setup-node</code>, <code>setup-bun</code>, <code>pnpm/action-setup</code>, corepack, and whether the install is frozen.</li>
+        </ul>
+
+        <h2>The ten rules</h2>
+        <div class="table-wrap">
+          <table>
+            <caption>Rules across Node drift, package-manager drift, lockfiles, and CI.</caption>
+            <thead>
+              <tr>
+                <th scope="col">Code</th>
+                <th scope="col">Severity</th>
+                <th scope="col">Check</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td><code>LOCK-001</code></td><td><span class="chip chip--error">error</span></td><td>Conflicting Node versions across sources</td></tr>
+              <tr><td><code>LOCK-002</code></td><td><span class="chip chip--error">error</span></td><td><code>packageManager</code> conflicts with the committed lockfile</td></tr>
+              <tr><td><code>LOCK-003</code></td><td><span class="chip chip--error">error</span></td><td>Multiple lockfiles from different managers</td></tr>
+              <tr><td><code>LOCK-004</code></td><td><span class="chip chip--warning">warning</span></td><td>Lockfile committed but CI does not install frozen</td></tr>
+              <tr><td><code>LOCK-005</code></td><td><span class="chip chip--warning">warning</span></td><td>No lockfile committed</td></tr>
+              <tr><td><code>LOCK-006</code></td><td><span class="chip chip--warning">warning</span></td><td><code>packageManager</code> declared but CI never enables corepack</td></tr>
+              <tr><td><code>LOCK-007</code></td><td><span class="chip chip--info">info</span></td><td><code>engines.node</code> range does not include the CI-pinned Node</td></tr>
+              <tr><td><code>LOCK-008</code></td><td><span class="chip chip--info">info</span></td><td><code>.nvmrc</code> and <code>.node-version</code> differ only cosmetically</td></tr>
+              <tr><td><code>LOCK-009</code></td><td><span class="chip chip--warning">warning</span></td><td>CI <code>bun-version</code> major disagrees with <code>engines.bun</code></td></tr>
+              <tr><td><code>LOCK-010</code></td><td><span class="chip chip--info">info</span></td><td>No GitHub Actions workflow found so CI cannot be verified</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h2>How the checks behave</h2>
+
+        <h3>LOCK-001 — conflicting Node versions</h3>
+        <p>Every Node declaration is reduced to its major, and the majors must be a single value. Two sources claiming Node 18 and Node 20 is an error; a range such as <code>&gt;=18</code> is compared by the major it names.</p>
+
+        <h3>LOCK-002 — packageManager versus the lockfile</h3>
+        <p>The manager named in <code>packageManager</code> must own the committed lockfile. Declaring <code>pnpm</code> while committing a <code>package-lock.json</code> is an error, because the next contributor will install with a different manager than the one the project pins.</p>
+
+        <h3>LOCK-003 — multiple lockfiles</h3>
+        <p>More than one manager's lockfile in the tree is an error. Two lockfiles mean two resolution graphs, and whichever a tool happens to pick silently wins.</p>
+
+        <h3>LOCK-004 — frozen installs</h3>
+        <p>A committed lockfile is only authoritative if CI installs from it without rewriting it. When a lockfile exists and a workflow does not use <code>npm ci</code>, <code>--frozen-lockfile</code>, or <code>--immutable</code>, lockstep warns.</p>
+
+        <h3>LOCK-005 — no lockfile</h3>
+        <p>With no lockfile committed, dependency resolution is not pinned at all. This warns rather than errors, because some libraries intentionally ship without one.</p>
+
+        <h3>LOCK-006 — corepack never enabled</h3>
+        <p>A <code>packageManager</code> field does nothing unless a workflow activates it. lockstep warns when the field is present but no workflow enables Corepack or pins the same package-manager version through an action.</p>
+
+        <h3>LOCK-007 — engines versus CI</h3>
+        <p>When <code>engines.node</code> is a simple range, its major should include the Node version CI pins. A range that excludes the CI runtime is informational, because the two can drift without the build failing outright.</p>
+
+        <h3>LOCK-008 — cosmetic difference</h3>
+        <p><code>.nvmrc</code> and <code>.node-version</code> that differ only by a <code>v</code> prefix or trailing whitespace still resolve to the same version. lockstep reports it so the two files can be made identical.</p>
+
+        <h3>LOCK-009 — Bun version</h3>
+        <p>When <code>engines.bun</code> and a workflow's <code>bun-version</code> disagree by major, lockstep warns. The same drift that applies to Node applies to Bun.</p>
+
+        <h3>LOCK-010 — CI cannot be verified</h3>
+        <p>With no <code>.github/workflows/*.yml</code>, lockstep cannot confirm how the project installs or which runtime it uses. It reports that as informational, so a green result is never mistaken for a verified one.</p>
+
+        <h2>How a run is assembled</h2>
+        <p>The pipeline is static. There is no rendering step and no network access.</p>
+        <ol class="steps">
+          <li class="step">
+            <h3>Scan</h3>
+            <p>Read <code>package.json</code>, the version files, the lockfiles, and the workflow directory, collecting each version declaration with the file it came from.</p>
+          </li>
+          <li class="step">
+            <h3>Normalize</h3>
+            <p>Reduce each value to a comparable form: a major for runtimes, a manager name for lockfiles, and a pinned version for actions.</p>
+          </li>
+          <li class="step">
+            <h3>Compare</h3>
+            <p>Run the ten rule functions over the collected facts. Each emits an issue with a code, a severity, a location, and a message.</p>
+          </li>
+          <li class="step">
+            <h3>Report</h3>
+            <p>Print text or JSON, optionally write SARIF 2.1.0, and exit <code>0</code>, <code>1</code>, <code>2</code>, or <code>3</code> for CI.</p>
+          </li>
+        </ol>
+
+        <div class="docs__foot">
+          <a href="index.html">← Overview</a>
+          <a href="usage.html">Usage →</a>
+        </div>
+      </article>
+    </div>
+  </div>
+</main>
+
+<footer class="footer">
+  <div class="container">
+    <div class="footer__inner">
+      <div class="footer__brand">
+        <span class="brand__mark" aria-hidden="true">
+          <svg class="icon" viewBox="0 0 32 32" focusable="false">
+            <path d="M9 8v16"></path>
+            <path d="M23 8v16"></path>
+            <path d="M13 16l3 3 6-7"></path>
+          </svg>
+        </span>
+        <div>
+          <p>lockstep</p>
+          <p class="muted">Offline toolchain drift guard for JavaScript and TypeScript projects.</p>
+        </div>
+      </div>
+
+      <nav aria-label="Documentation">
+        <h2>Documentation</h2>
+        <ul>
+          <li><a href="rules.html">Rules</a></li>
+          <li><a href="usage.html">Usage</a></li>
+          <li><a href="ci.html">CI</a></li>
+          <li><a href="faq.html">FAQ</a></li>
+        </ul>
+      </nav>
+
+      <nav aria-label="Project">
+        <h2>Project</h2>
+        <ul>
+          <li><a href="https://github.com/srivtx/lockstep">Repository</a></li>
+          <li><a href="https://github.com/srivtx/lockstep/blob/main/LICENSE">MIT license</a></li>
+          <li><a href="https://github.com/srivtx/lockstep/issues">Issues</a></li>
+          <li><a href="https://srivtx.github.io/lenses">Lenses suite</a></li>
+        </ul>
+      </nav>
+    </div>
+
+    <div class="footer__meta">
+      <p>by svx · MIT Licensed · 2026</p>
+      <a href="#top">Back to top</a>
+    </div>
+  </div>
+</footer>
+
+<script src="assets/site.js" defer></script>
+</body>
+</html>

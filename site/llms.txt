@@ -1,0 +1,18 @@
+# lockstep
+
+> Offline drift guard for JavaScript and TypeScript projects.
+
+lockstep reads a project and cross-checks every place a Node, Bun, or package-manager version is declared — `package.json` (`engines`, `packageManager`, `volta`), `.nvmrc`, `.node-version`, `.tool-versions`, `mise.toml`, the committed lockfile, and every `.github/workflows/*.yml` — then reports conflicts before you push. It is not a security scanner.
+
+It runs entirely offline, with no network calls and no telemetry, and audits one project per run. Output is human-readable text, stable JSON, and SARIF 2.1.0 for code scanning. Exit codes are `0` (no findings at or above `--fail-on`), `1` (findings), `2` (invalid usage or unreadable input), and `3` (I/O error).
+
+## Docs
+- [Overview](https://srivtx.github.io/lockstep/): Catch toolchain drift before you push.
+- [Rules](https://srivtx.github.io/lockstep/rules): Every `LOCK-0xx` rule code and the declaration sources it compares.
+- [Usage](https://srivtx.github.io/lockstep/usage): CLI flags, exit codes, JSON output, and SARIF 2.1.0.
+- [CI](https://srivtx.github.io/lockstep/ci): Run lockstep as a gate in GitHub Actions before the push.
+- [FAQ](https://srivtx.github.io/lockstep/faq): Scope, the sources it reads, and what it deliberately does not check.
+
+## Optional
+- [Source](https://github.com/srivtx/lockstep): TypeScript implementation, tests, and issue tracker.
+- [Install script](https://raw.githubusercontent.com/srivtx/lockstep/main/install.sh): One-line install of the `lockstep` binary.

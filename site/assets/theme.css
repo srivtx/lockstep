@@ -1,0 +1,18 @@
+/* lockstep — per-tool accent. Only the accent changes here; everything else
+   comes from lens.css. */
+:root {
+  --accent: #16a34a;
+  --accent-ink: #ffffff;
+}
+
+[data-theme="dark"] {
+  --accent: #4ade80;
+  --accent-ink: #0a0a0a;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --accent: #4ade80;
+    --accent-ink: #0a0a0a;
+  }
+}

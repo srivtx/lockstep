@@ -1,0 +1,73 @@
+{
+  "name": "lockstep",
+  "version": "0.1.0",
+  "description": "Offline drift guard for JavaScript and TypeScript projects: cross-checks Node, Bun and package-manager versions across engines, .nvmrc, asdf/mise, lockfiles and every GitHub Actions workflow before you push.",
+  "type": "module",
+  "author": "svx",
+  "main": "src/index.ts",
+  "module": "src/index.ts",
+  "types": "src/index.ts",
+  "exports": {
+    ".": {
+      "types": "./src/index.ts",
+      "import": "./src/index.ts",
+      "default": "./src/index.ts"
+    },
+    "./package.json": "./package.json"
+  },
+  "sideEffects": [
+    "./src/cli.ts"
+  ],
+  "private": true,
+  "bin": {
+    "lockstep": "src/cli.ts"
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "test": "bun test",
+    "make-fixtures": "bun src/fixtures.ts",
+    "build:site": "node scripts/build-site.mjs",
+    "check:site": "node scripts/check-site.mjs"
+  },
+  "keywords": [
+    "lockfile",
+    "toolchain",
+    "drift",
+    "ci",
+    "github-actions",
+    "node-version",
+    "package-manager",
+    "corepack",
+    "nvmrc",
+    "engines",
+    "lint",
+    "cli",
+    "sarif",
+    "bun"
+  ],
+  "license": "MIT",
+  "repository": "https://github.com/srivtx/lockstep",
+  "homepage": "https://srivtx.github.io/lockstep",
+  "bugs": {
+    "url": "https://github.com/srivtx/lockstep/issues"
+  },
+  "engines": {
+    "bun": ">=1.1.0"
+  },
+  "files": [
+    "src",
+    "install.sh",
+    "README.md",
+    "LICENSE",
+    "CHANGELOG.md",
+    "SECURITY.md"
+  ],
+  "devDependencies": {
+    "@types/bun": "^1.4.2",
+    "esbuild": "^0.25.0",
+    "typescript": "^7.0.2"
+  },
+  "dependencies": {
+    "yaml": "^2.6.1"
+  }
+}
